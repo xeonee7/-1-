@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>약리학 N01–N08 계층 퀴즈</title>
+<style>
+:root{
+  --bg:#f5f7fb; --card:#fff; --text:#162033; --muted:#667085; --line:#e4e7ec;
+  --ok:#15803d; --bad:#b42318; --accent:#315efb; --accentSoft:#eef2ff;
+  --star:#f59e0b; --top:#fff1ed; --important:#fffbeb;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif
+}
+button,input{font:inherit}
+.wrap{max-width:820px;margin:0 auto;padding:20px 16px 52px}
+h1{font-size:26px;margin:8px 0 4px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:14px;margin-bottom:18px;line-height:1.55}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 6px 22px rgba(16,24,40,.06)}
+.hidden{display:none!important}
+.login{max-width:440px;margin:10vh auto 0}
+.idinput{width:100%;font-size:28px;letter-spacing:.35em;text-align:center;padding:16px;border:1px solid var(--line);border-radius:14px;outline:none}
+.idinput:focus{border-color:#9aa9ff;box-shadow:0 0 0 3px #eef2ff}
+.loginmsg{min-height:22px;color:var(--bad);font-size:13px;margin:8px 2px}
+.note{margin-top:14px;color:var(--muted);font-size:12px;line-height:1.55}
+.primary,.secondary,.segbtn{
+  border:0;border-radius:13px;padding:12px 15px;cursor:pointer;font-weight:750
+}
+.primary{background:var(--accent);color:#fff}
+.secondary{background:#eef0f4;color:#344054}
+.smallbtn{border:0;background:transparent;color:var(--accent);padding:6px 0;cursor:pointer;font-weight:750}
+.userline{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--muted);font-size:13px}
+.controlbox{margin:14px 0 8px;padding:13px;background:#f8fafc;border:1px solid #eef0f4;border-radius:15px}
+.controlrow{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.controlrow+.controlrow{margin-top:10px}
+.controltitle{font-size:12px;font-weight:800;color:#475467;min-width:58px}
+.segment{display:flex;gap:7px;flex-wrap:wrap}
+.segbtn{background:#fff;border:1px solid var(--line);color:#475467;padding:9px 11px;font-size:13px}
+.segbtn.active{background:var(--accentSoft);border-color:#aab7ff;color:#294bcc}
+.segbtn .count{opacity:.65;font-weight:650}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.stat{background:#f8fafc;border-radius:12px;padding:12px;text-align:center}
+.stat b{display:block;font-size:20px}
+.stat span{font-size:12px;color:var(--muted)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:10px 0 4px}
+.badge{font-size:13px;background:var(--accentSoft);padding:7px 10px;border-radius:999px}
+.score{font-size:14px;color:var(--muted)}
+.drugline{display:flex;align-items:flex-start;gap:10px;margin:14px 0 2px}
+.drugwrap{min-width:0;flex:1}
+.drug{font-size:31px;font-weight:850;letter-spacing:-.025em;word-break:break-word;line-height:1.2}
+.priority{display:inline-block;margin-top:7px;font-size:12px;font-weight:800;padding:5px 8px;border-radius:999px}
+.priority.topP{background:var(--top);color:#b93815}
+.priority.impP{background:var(--important);color:#a16207}
+.starbtn{
+  width:46px;height:46px;border:1px solid var(--line);border-radius:14px;background:#fff;
+  font-size:27px;line-height:1;cursor:pointer;color:#98a2b3;flex:0 0 auto
+}
+.starbtn.on{color:var(--star);border-color:#fbd38d;background:#fffaf0}
+.stage{font-size:16px;color:var(--muted);margin:15px 0 10px;line-height:1.5}
+.contextHint{font-size:13px;color:#475467;background:#f8fafc;border-left:3px solid #c7d2fe;padding:9px 11px;border-radius:8px;margin:0 0 14px;line-height:1.5}
+.opts{display:grid;gap:10px}
+.opts.pptopts{grid-template-columns:repeat(4,1fr)}
+.opts.pptopts .opt{text-align:center;font-weight:800;padding:13px 8px}
+.opt{width:100%;text-align:left;border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px 16px;font-size:15px;line-height:1.48;cursor:pointer}
+.opt:hover{border-color:#b8c3ff;background:#f8f9ff}
+.opt:disabled{cursor:default;opacity:.9}
+.opt.correct{border-color:#86efac;background:#f0fdf4;color:#166534}
+.opt.wrong{border-color:#fda29b;background:#fff1f0;color:#b42318}
+.keynum{display:inline-block;min-width:25px;font-weight:850}
+.feedback{min-height:48px;margin-top:13px;font-size:15px;line-height:1.5}
+.progress{height:7px;background:#eceff4;border-radius:999px;overflow:hidden;margin-top:16px}
+.bar{height:100%;width:0;background:var(--accent);transition:.25s}
+.path{margin-top:16px;padding:14px;background:#f8fafc;border-radius:14px;font-size:14px;line-height:1.65;display:none}
+.actions{display:flex;gap:9px;margin-top:15px;flex-wrap:wrap}
+.actions .primary{flex:1;min-width:150px}
+.actions .secondary{font-size:13px}
+.history{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}
+.history h3{font-size:15px;margin:0 0 8px}
+.histrow{font-size:13px;padding:8px 0;border-bottom:1px solid #f0f2f5;line-height:1.45}
+.modepill{font-size:12px;color:#475467;margin-top:4px}
+.overlay{position:fixed;inset:0;background:rgba(15,23,42,.48);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px}
+.roundcard{width:min(440px,100%);background:#fff;border-radius:24px;padding:30px 24px;text-align:center;box-shadow:0 24px 80px rgba(15,23,42,.22)}
+.roundicon{width:66px;height:66px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;background:#eef2ff;color:#315efb;font-size:32px;font-weight:900}
+.roundtitle{font-size:29px;font-weight:900;letter-spacing:-.03em}
+.roundsub{margin:8px 0 20px;color:var(--muted);font-size:14px;line-height:1.55}
+.roundcard .primary{width:100%}
+.creator-watermark{position:fixed;right:14px;bottom:10px;z-index:1000;font-size:12px;font-weight:600;color:rgba(80,80,80,.28);letter-spacing:.02em;pointer-events:none;user-select:none}
+@media(max-width:560px){
+  .card{padding:17px}.drug{font-size:26px}.opt{padding:13px 14px}
+  .stats{gap:6px}.stat{padding:10px 6px}.stat b{font-size:18px}
+  .controltitle{width:100%;min-width:0}.controlrow{align-items:flex-start}
+  .opts.pptopts{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap login" id="loginScreen">
+  <h1>약리학 N01–N08 계층 퀴즈</h1>
+  <div class="sub">4자리 숫자 ID별로 회독·오답·즐겨찾기 기록을 이 브라우저에 저장해.</div>
+  <div class="card">
+    <input id="idInput" class="idinput" inputmode="numeric" maxlength="4" placeholder="0000" autocomplete="off">
+    <div class="loginmsg" id="loginMsg"></div>
+    <button class="primary" id="loginBtn" style="width:100%">시작하기</button>
+    <div class="note">같은 기기·같은 브라우저에서 다시 열면 기록이 이어져. 저장이 제한된 브라우저에서는 현재 실행 중에만 기록이 유지될 수 있어.</div>
+  </div>
+</div>
+
+<div class="wrap hidden" id="quizScreen">
+  <h1>약리학 N01–N08 계층 퀴즈</h1>
+  <div class="sub">약물 → PPT → 약물 분류 → 핵심 기전 → 꼭 외울 한 줄. 한 회독에서는 같은 항목이 반복되지 않아.</div>
+
+  <div class="card">
+    <div class="userline">
+      <span>현재 ID: <b id="userIdText"></b></span>
+      <button class="smallbtn" id="switchBtn">ID 변경</button>
+    </div>
+
+    <div class="controlbox">
+      <div class="controlrow">
+        <div class="controltitle">출제 범위</div>
+        <div class="segment">
+          <button class="segbtn" id="topOnlyBtn">최우선만 <span class="count" id="topOnlyCount"></span></button>
+          <button class="segbtn" id="topImportantBtn">최우선 + 중요 <span class="count" id="topImportantCount"></span></button>
+        </div>
+      </div>
+      <div class="controlrow">
+        <div class="controltitle">문제 모드</div>
+        <div class="segment">
+          <button class="segbtn" data-mode="all" id="allModeBtn">전체 <span class="count" id="allCount"></span></button>
+          <button class="segbtn" data-mode="favorite" id="favoriteModeBtn">★ 즐겨찾기 <span class="count" id="favoriteCount"></span></button>
+          <button class="segbtn" data-mode="wrong" id="wrongModeBtn">오답만 <span class="count" id="wrongCount"></span></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b id="roundStat">1</b><span>회독</span></div>
+      <div class="stat"><b id="completedRoundStat">0</b><span>이번 회독 완료</span></div>
+      <div class="stat"><b id="remainingStat">0</b><span>남은 약물</span></div>
+    </div>
+
+    <div class="top">
+      <div class="badge" id="badge">1단계 / 4단계</div>
+      <div class="score" id="score">정답 0 / 0</div>
+    </div>
+
+    <div class="drugline">
+      <div class="drugwrap">
+        <div class="drug" id="drug"></div>
+        <div class="priority" id="priorityBadge"></div>
+        <div class="modepill" id="modePill"></div>
+      </div>
+      <button class="starbtn" id="starBtn" title="즐겨찾기" aria-label="즐겨찾기">☆</button>
+    </div>
+
+    <div class="stage" id="stage"></div>
+    <div class="contextHint hidden" id="contextHint"></div>
+    <div class="opts" id="opts"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="path" id="path"></div>
+
+    <div class="actions">
+      <button class="secondary" id="resetBtn">이 ID 기록 초기화</button>
+      <button class="primary" id="nextBtn" style="display:none">다음 약물</button>
+    </div>
+
+    <div class="history">
+      <h3>최근 완료 기록</h3>
+      <div id="historyBox"></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="roundOverlay">
+  <div class="roundcard">
+    <div class="roundicon">✓</div>
+    <div class="roundtitle" id="roundDoneTitle">1회독 끝!</div>
+    <div class="roundsub" id="roundDoneSub"></div>
+    <button class="primary" id="nextRoundBtn">다음 회독 시작</button>
+  </div>
+</div>
+
+<script>
+const drugs = [{"id":"N01::Betahistine::1","ppt":"N01","name":"Betahistine","classification":"H1 agonist / H3 antagonist","mechanism":"혈관확장; histamine계 조절","use":"메니에르병, 현기증","keyline":"H1 효현 + H3 길항의 혼합 작용","priority":"중요"},{"id":"N01::Epinephrine::2","ppt":"N01","name":"Epinephrine","classification":"생리적 길항제","mechanism":"α/β 수용체 자극으로 histamine 작용에 반대","use":"전신 아나필락시스","keyline":"아나필락시스 1차 치료; H1 길항제는 보조","priority":"최우선"},{"id":"N01::Cromolyn sodium::3","ppt":"N01","name":"Cromolyn sodium","classification":"Mast-cell stabilizer","mechanism":"비만세포 안정화 → histamine/LT 유리 억제","use":"천식 예방, 알레르기","keyline":"예방약; 급성 기관지연축 치료 X","priority":"최우선"},{"id":"N01::Nedocromil sodium::4","ppt":"N01","name":"Nedocromil sodium","classification":"Mast-cell stabilizer","mechanism":"비만세포 탈과립 억제","use":"천식 예방, 알레르기 결막염","keyline":"국소 흡입/점안, 예방적 사용","priority":"중요"},{"id":"N01::Scopolamine::5","ppt":"N01","name":"Scopolamine","classification":"Muscarinic antagonist","mechanism":"중추 항무스카린 작용","use":"멀미","keyline":"멀미에 가장 효과적인 약물","priority":"최우선"},{"id":"N01::Chlorpheniramine::7","ppt":"N01","name":"Chlorpheniramine","classification":"1세대 H1 inverse agonist","mechanism":"H1 차단 + 항무스카린","use":"알레르기","keyline":"진정/항콜린 부작용","priority":"중요"},{"id":"N01::Clemastine::10","ppt":"N01","name":"Clemastine","classification":"1세대 H1 inverse agonist","mechanism":"H1 차단","use":"알레르기; MS 연구","keyline":"remyelination 연구 포인트","priority":"중요"},{"id":"N01::Diphenhydramine::11","ppt":"N01","name":"Diphenhydramine","classification":"1세대 H1 inverse agonist","mechanism":"H1 차단 + 중추 항무스카린 + Na+ channel 차단","use":"알레르기, 가려움, 급성 근긴장이상, 수면","keyline":"강한 진정; 국소마취; EPS 조절","priority":"최우선"},{"id":"N01::Hydroxyzine::13","ppt":"N01","name":"Hydroxyzine","classification":"1세대 H1 inverse agonist","mechanism":"H1 차단","use":"알레르기, 불안 보조","keyline":"강한 진정 + 가벼운 항불안","priority":"중요"},{"id":"N01::Dimenhydrinate::17","ppt":"N01","name":"Dimenhydrinate","classification":"1세대 H1 inverse agonist","mechanism":"diphenhydramine + 8-chlorotheophylline","use":"멀미","keyline":"멀미 1시간 전; 진정 보완 구조","priority":"최우선"},{"id":"N01::Cyclizine::18","ppt":"N01","name":"Cyclizine","classification":"1세대 H1 inverse agonist","mechanism":"H1 + 항무스카린","use":"멀미","keyline":"멀미/전정장애","priority":"중요"},{"id":"N01::Meclizine::19","ppt":"N01","name":"Meclizine","classification":"1세대 H1 inverse agonist","mechanism":"H1 + 항무스카린","use":"멀미, 메니에르/전정장애","keyline":"12–24 h 비교적 장시간","priority":"최우선"},{"id":"N01::Promethazine::20","ppt":"N01","name":"Promethazine","classification":"1세대 H1 inverse agonist","mechanism":"H1 + 항무스카린","use":"멀미, 구역·구토","keyline":"강한 진정; 항암/방사선 N/V에 일부 도움","priority":"최우선"},{"id":"N01::Doxylamine::21","ppt":"N01","name":"Doxylamine","classification":"1세대 H1 inverse agonist","mechanism":"H1 차단","use":"불면 보조","keyline":"강한 진정으로 수면유도","priority":"중요"},{"id":"N01::Cyproheptadine::22","ppt":"N01","name":"Cyproheptadine","classification":"1세대 H1 + 5-HT2 antagonist","mechanism":"H1/serotonin 차단","use":"식욕증진, serotonin syndrome","keyline":"식욕 증가; 5-HT 길항","priority":"최우선"},{"id":"N01::Acrivastine::23","ppt":"N01","name":"Acrivastine","classification":"2세대 H1 inverse agonist","mechanism":"말초 H1 차단","use":"알레르기","keyline":"간대사 적은 편(<40%)","priority":"중요"},{"id":"N01::Azelastine::24","ppt":"N01","name":"Azelastine","classification":"2세대 H1 inverse agonist","mechanism":"말초 H1 차단","use":"알레르기 비염/국소","keyline":"비진정성 위주","priority":"중요"},{"id":"N01::Bepotastine::25","ppt":"N01","name":"Bepotastine","classification":"2세대 H1 inverse agonist","mechanism":"말초 H1 차단","use":"알레르기","keyline":"2세대 항히스타민","priority":"중요"},{"id":"N01::Ebastine::26","ppt":"N01","name":"Ebastine","classification":"2세대 H1 inverse agonist","mechanism":"말초 H1 차단","use":"알레르기","keyline":"2세대 항히스타민","priority":"중요"},{"id":"N01::Epinastine::28","ppt":"N01","name":"Epinastine","classification":"2세대 H1 inverse agonist","mechanism":"말초 H1 차단","use":"알레르기","keyline":"간대사 매우 적음(<10%)","priority":"중요"},{"id":"N01::Ketotifen::29","ppt":"N01","name":"Ketotifen","classification":"2세대 H1 inverse agonist","mechanism":"H1 차단; 비만세포 매개체 감소","use":"알레르기/결막염","keyline":"국소 알레르기 치료 포인트","priority":"중요"},{"id":"N01::Loratadine::30","ppt":"N01","name":"Loratadine","classification":"2세대 H1 inverse agonist","mechanism":"말초 H1 차단","use":"알레르기","keyline":"진정 거의 없음","priority":"최우선"},{"id":"N01::Olopatadine::31","ppt":"N01","name":"Olopatadine","classification":"2세대 H1 inverse agonist","mechanism":"말초 H1 차단","use":"알레르기 결막염","keyline":"국소요법","priority":"중요"},{"id":"N01::Fexofenadine::32","ppt":"N01","name":"Fexofenadine","classification":"2세대 H1 inverse agonist","mechanism":"terfenadine 활성대사물; 간대사 거의 없음","use":"알레르기","keyline":"운전/CYP3A4 억제 상황; 심장독성 적음","priority":"최우선"},{"id":"N01::Cetirizine::33","ppt":"N01","name":"Cetirizine","classification":"2세대 H1 inverse agonist","mechanism":"말초 H1 차단","use":"알레르기","keyline":"2세대지만 진정 가능(+)","priority":"최우선"},{"id":"N01::Levocetirizine::34","ppt":"N01","name":"Levocetirizine","classification":"2세대 H1 inverse agonist","mechanism":"말초 H1 차단","use":"알레르기","keyline":"간대사 매우 적음","priority":"중요"},{"id":"N01::Desloratadine::35","ppt":"N01","name":"Desloratadine","classification":"2세대 H1 inverse agonist","mechanism":"말초 H1 차단","use":"알레르기","keyline":"비진정성","priority":"중요"},{"id":"N01::Terfenadine::37","ppt":"N01","name":"Terfenadine","classification":"구 2세대 H1 antagonist","mechanism":"CYP3A4 대사","use":"알레르기(과거)","keyline":"QT 연장/TdP; 시장 철수","priority":"최우선"},{"id":"N01::Astemizole::38","ppt":"N01","name":"Astemizole","classification":"구 2세대 H1 antagonist","mechanism":"CYP3A4 관련","use":"알레르기(과거)","keyline":"QT 연장/다형성 심실빈맥; 철수","priority":"최우선"},{"id":"N01::Cimetidine::41","ppt":"N01","name":"Cimetidine","classification":"H2 antagonist","mechanism":"벽세포 H2 경쟁적 차단","use":"소화궤양/GERD","keyline":"androgen 길항, CYP450 억제, 여성유방증","priority":"최우선"},{"id":"N01::Ranitidine::42","ppt":"N01","name":"Ranitidine","classification":"H2 antagonist","mechanism":"벽세포 H2 차단","use":"소화궤양(과거)","keyline":"강의록상 퇴출 표시","priority":"중요"},{"id":"N01::Famotidine::43","ppt":"N01","name":"Famotidine","classification":"H2 antagonist","mechanism":"벽세포 H2 차단","use":"소화궤양/GERD","keyline":"상호작용 적음","priority":"중요"},{"id":"N01::Nizatidine::44","ppt":"N01","name":"Nizatidine","classification":"H2 antagonist","mechanism":"H2 차단 + AChE 억제","use":"소화궤양/GERD","keyline":"예외적으로 위운동↑/위배출↑","priority":"최우선"},{"id":"N01::Pitolisant::50","ppt":"N01","name":"Pitolisant","classification":"H3 antagonist/inverse agonist","mechanism":"H3 기본활성↓ → histamine 유리↑","use":"기면증","keyline":"각성 촉진","priority":"최우선"},{"id":"N01::Prednisone::56","ppt":"N01","name":"Prednisone","classification":"Glucocorticoid","mechanism":"광범위 항염증","use":"항히스타민 불응 급성 두드러기","keyline":"고용량 후 taper 예시","priority":"최우선"},{"id":"N01::Icatibant::57","ppt":"N01","name":"Icatibant","classification":"B2 receptor antagonist","mechanism":"Bradykinin B2 차단","use":"HAE 급성발작","keyline":"HAE vignette 최우선","priority":"최우선"},{"id":"N01::CINRYZE::61","ppt":"N01","name":"CINRYZE","classification":"C1-INH 제제","mechanism":"C1 esterase inhibitor 보충","use":"HAE 예방","keyline":"정맥 예방용","priority":"중요"},{"id":"N01::HAEGARDA::62","ppt":"N01","name":"HAEGARDA","classification":"C1-INH 제제","mechanism":"C1 esterase inhibitor 보충","use":"HAE 예방","keyline":"피하 예방용","priority":"중요"},{"id":"N01::BERINERT::63","ppt":"N01","name":"BERINERT","classification":"C1-INH 제제","mechanism":"C1 esterase inhibitor 보충","use":"HAE 급성발작","keyline":"급성발작 치료","priority":"중요"},{"id":"N01::RUCONEST::64","ppt":"N01","name":"RUCONEST","classification":"C1-INH 제제","mechanism":"C1 esterase inhibitor 보충","use":"HAE 급성발작","keyline":"급성발작 치료","priority":"중요"},{"id":"N01::Ecallantide::65","ppt":"N01","name":"Ecallantide","classification":"Plasma kallikrein inhibitor","mechanism":"kallikrein 억제 → bradykinin 생성↓","use":"HAE 급성발작","keyline":"아나필락시스 3–4% → 의료진 투여","priority":"최우선"},{"id":"N01::Lanadelumab::66","ppt":"N01","name":"Lanadelumab","classification":"Plasma kallikrein mAb","mechanism":"혈장 kallikrein 억제","use":"HAE 예방","keyline":"지속형 완전 인간 mAb","priority":"최우선"},{"id":"N01::Morphine::68","ppt":"N01","name":"Morphine","classification":"Histamine release 유발약","mechanism":"비면역학적 비만세포 histamine 유리","use":"함정/기전 예시","keyline":"사전 감작 없이 유리 가능","priority":"중요"},{"id":"N01::Vancomycin::71","ppt":"N01","name":"Vancomycin","classification":"Histamine release 유발약","mechanism":"직접 histamine 유리","use":"infusion-related 반응/함정","keyline":"사전 감작 없이 가능","priority":"최우선"},{"id":"N01::Tubocurarine::72","ppt":"N01","name":"Tubocurarine","classification":"Histamine release 유발약","mechanism":"직접 histamine 유리","use":"함정","keyline":"Quiz 핵심 예시","priority":"최우선"},{"id":"N01::Polymyxin B::76","ppt":"N01","name":"Polymyxin B","classification":"강력한 histamine release 유발약","mechanism":"직접 histamine 유리","use":"함정","keyline":"강력한 유리약","priority":"중요"},{"id":"N02::p-Chlorophenylalanine (PCPA, fenclonine)::1","ppt":"N02","name":"p-Chlorophenylalanine (PCPA, fenclonine)","classification":"5-HT 합성 억제","mechanism":"tryptophan hydroxylation(속도제한 단계) 억제","use":"연구/역사","keyline":"독성 커서 일반 사용 X","priority":"중요"},{"id":"N02::Atropine::3","ppt":"N02","name":"Atropine","classification":"Muscarinic antagonist","mechanism":"미주신경 차단","use":"Bezold–Jarisch reflex의 서맥 완화","keyline":"5-HT3 반사에서 bradycardia 완화","priority":"중요"},{"id":"N02::Dantrolene::4","ppt":"N02","name":"Dantrolene","classification":"골격근 이완제","mechanism":"골격근 과흥분 억제","use":"악성고열증; NMS 치료","keyline":"5-HT2 차단제가 표준치료는 아님","priority":"중요"},{"id":"N02::Buspirone::6","ppt":"N02","name":"Buspirone","classification":"5-HT1A agonist","mechanism":"5-HT1A 활성","use":"불안","keyline":"대표적 5-HT 효능제","priority":"최우선"},{"id":"N02::Dexfenfluramine::7","ppt":"N02","name":"Dexfenfluramine","classification":"5-HT 효능/식욕억제제","mechanism":"serotonergic 식욕억제","use":"비만(과거)","keyline":"판막병증·폐고혈압 → 철수","priority":"중요"},{"id":"N02::Sumatriptan::8","ppt":"N02","name":"Sumatriptan","classification":"5-HT1B/1D agonist","mechanism":"두개혈관 수축 + CGRP 분비↓","use":"급성 중등도~중증 편두통","keyline":"관상동맥질환 금기","priority":"최우선"},{"id":"N02::Cisapride::9","ppt":"N02","name":"Cisapride","classification":"5-HT4 agonist","mechanism":"ENS ACh 유리↑ → GI motility↑","use":"GERD/장운동 이상(과거)","keyline":"QT 연장·부정맥 → 철수","priority":"최우선"},{"id":"N02::Tegaserod::10","ppt":"N02","name":"Tegaserod","classification":"5-HT4 partial agonist","mechanism":"장운동 촉진","use":"변비형 IBS","keyline":"CV 사건으로 철수 후 제한 재승인","priority":"중요"},{"id":"N02::Fluoxetine::11","ppt":"N02","name":"Fluoxetine","classification":"SSRI","mechanism":"5-HT 재흡수 억제","use":"우울증/행동장애","keyline":"serotonin syndrome 조합 주의","priority":"중요"},{"id":"N02::Cyproheptadine::13","ppt":"N02","name":"Cyproheptadine","classification":"5-HT2 + H1 antagonist","mechanism":"5-HT2 차단","use":"Serotonin syndrome, 식욕증진","keyline":"중증 serotonin syndrome 치료","priority":"최우선"},{"id":"N02::Ketanserin::14","ppt":"N02","name":"Ketanserin","classification":"5-HT2 + α1 antagonist","mechanism":"5-HT2/α1 차단","use":"혈압 감소 연구","keyline":"고혈압 치료제로 일반 사용 X","priority":"중요"},{"id":"N02::Ondansetron::16","ppt":"N02","name":"Ondansetron","classification":"5-HT3 antagonist","mechanism":"ligand-gated cation channel 차단","use":"수술/항암 N/V","keyline":"대표 항구토제","priority":"최우선"},{"id":"N02::LSD::17","ppt":"N02","name":"LSD","classification":"5-HT2A partial agonist","mechanism":"중추 5-HT2A 부분효현","use":"환각","keyline":"합성 ergot 화합물","priority":"최우선"},{"id":"N02::Bromocriptine::18","ppt":"N02","name":"Bromocriptine","classification":"Ergot D2 agonist","mechanism":"뇌하수체 D2 자극 → prolactin↓","use":"고프로락틴혈증; acromegaly 보조","keyline":"NMS 치료에도 언급","priority":"최우선"},{"id":"N02::Cabergoline::19","ppt":"N02","name":"Cabergoline","classification":"Ergot D2 agonist","mechanism":"D2 자극 → prolactin↓","use":"고프로락틴혈증","keyline":"더 강력·장시간; 주 1–2회","priority":"최우선"},{"id":"N02::Ergotamine::21","ppt":"N02","name":"Ergotamine","classification":"Ergot alkaloid","mechanism":"강력·지속 혈관수축","use":"편두통 급성 발작","keyline":"초기 투여; 누적 혈관독성","priority":"최우선"},{"id":"N02::Ergonovine::22","ppt":"N02","name":"Ergonovine","classification":"Ergot alkaloid","mechanism":"자궁 평활근 강력 수축","use":"산후 출혈","keyline":"후기 자궁출혈 치료","priority":"최우선"},{"id":"N02::Methysergide::23","ppt":"N02","name":"Methysergide","classification":"5-HT 관련 ergot 유도체","mechanism":"serotonin 길항 성격","use":"편두통 예방(과거)","keyline":"후복막/심내막 섬유화 → 거의 사용 X","priority":"최우선"},{"id":"N02::Propranolol::27","ppt":"N02","name":"Propranolol","classification":"β blocker","mechanism":"β 차단","use":"편두통 예방","keyline":"기타 예방약","priority":"중요"},{"id":"N02::Amitriptyline::28","ppt":"N02","name":"Amitriptyline","classification":"TCA","mechanism":"monoamine 재흡수 억제","use":"편두통 예방","keyline":"기타 예방약","priority":"중요"},{"id":"N02::Oxytocin::31","ppt":"N02","name":"Oxytocin","classification":"자궁수축제","mechanism":"oxytocin receptor 작용","use":"산후출혈","keyline":"ergonovine 대안/1차로 자주 사용","priority":"중요"},{"id":"N03::Glucocorticoids::1","ppt":"N03","name":"Glucocorticoids","classification":"Steroidal anti-inflammatory class","mechanism":"Annexin A1↑ → PLA2 억제 + COX-2 발현 억제","use":"광범위 항염증","keyline":"AA 유리 단계의 upstream 차단","priority":"최우선"},{"id":"N03::Aspirin::2","ppt":"N03","name":"Aspirin","classification":"NSAID","mechanism":"COX 비가역적 acetylation","use":"진통·해열·항염증/항혈소판","keyline":"LOX 직접 억제 X; 저용량 platelet 효과","priority":"최우선"},{"id":"N03::Indomethacin::3","ppt":"N03","name":"Indomethacin","classification":"NSAID","mechanism":"COX-1/2 비선택 억제","use":"염증/통증","keyline":"COX 억제 예시; renal PG 억제","priority":"중요"},{"id":"N03::Ibuprofen::4","ppt":"N03","name":"Ibuprofen","classification":"NSAID","mechanism":"COX-1/2 비선택 억제","use":"염증/통증","keyline":"COX 억제 예시","priority":"중요"},{"id":"N03::Celecoxib::5","ppt":"N03","name":"Celecoxib","classification":"Selective COX-2 inhibitor","mechanism":"COX-2 선택 억제","use":"염증/통증","keyline":"혈소판 효과 거의 X","priority":"최우선"},{"id":"N03::Rofecoxib::6","ppt":"N03","name":"Rofecoxib","classification":"Selective COX-2 inhibitor","mechanism":"COX-2 선택 억제","use":"과거 관절염","keyline":"CV 부작용 → 철수","priority":"중요"},{"id":"N03::Valdecoxib::7","ppt":"N03","name":"Valdecoxib","classification":"Selective COX-2 inhibitor","mechanism":"COX-2 선택 억제","use":"과거","keyline":"CV 부작용 → 철수","priority":"중요"},{"id":"N03::Zileuton::11","ppt":"N03","name":"Zileuton","classification":"5-LOX inhibitor","mechanism":"5-lipoxygenase 억제","use":"천식/알레르기","keyline":"LT 생성 억제","priority":"최우선"},{"id":"N03::Zafirlukast::12","ppt":"N03","name":"Zafirlukast","classification":"CysLT receptor antagonist","mechanism":"cysteinyl-LT receptor 차단","use":"천식","keyline":"수용체 차단 vs zileuton 구별","priority":"최우선"},{"id":"N03::Pranlukast::13","ppt":"N03","name":"Pranlukast","classification":"CysLT receptor antagonist","mechanism":"cysteinyl-LT receptor 차단","use":"천식","keyline":"LT receptor antagonist","priority":"중요"},{"id":"N03::Montelukast::14","ppt":"N03","name":"Montelukast","classification":"CysLT receptor antagonist","mechanism":"cysteinyl-LT receptor 차단","use":"천식","keyline":"수용체 차단 vs zileuton 구별","priority":"최우선"},{"id":"N03::Dinoprostone::15","ppt":"N03","name":"Dinoprostone","classification":"PGE2 preparation","mechanism":"PGE2 작용 → 자궁수축","use":"분만 유도/자궁수축","keyline":"질내 투여","priority":"최우선"},{"id":"N03::Alprostadil::16","ppt":"N03","name":"Alprostadil","classification":"PGE1","mechanism":"평활근 이완","use":"동맥관 개존 유지; 발기부전","keyline":"PGE1 대표 약물","priority":"최우선"},{"id":"N03::Mifepristone::17","ppt":"N03","name":"Mifepristone","classification":"Progesterone receptor antagonist","mechanism":"progesterone 작용 차단","use":"임신중절","keyline":"PG와 복합제 사용 언급","priority":"중요"},{"id":"N03::Misoprostol::18","ppt":"N03","name":"Misoprostol","classification":"PGE1 analog","mechanism":"PGE1 작용","use":"NSAID 유발 위궤양 예방","keyline":"위점막 보호","priority":"최우선"},{"id":"N03::Epoprostenol::19","ppt":"N03","name":"Epoprostenol","classification":"PGI2 (prostacyclin)","mechanism":"IP receptor → cAMP↑ → 혈관확장","use":"폐고혈압","keyline":"강력한 혈관확장","priority":"최우선"},{"id":"N03::Sildenafil (Viagra)::22","ppt":"N03","name":"Sildenafil (Viagra)","classification":"PDE5 inhibitor","mechanism":"cGMP 분해 억제","use":"혈관평활근 이완 관련","keyline":"NO–cGMP 연계 약물","priority":"중요"},{"id":"N04::Clonidine::5","ppt":"N04","name":"Clonidine","classification":"α2 agonist","mechanism":"교감신경 억제 → renin 분비↓","use":"고혈압","keyline":"renin 유리 억제 예시","priority":"중요"},{"id":"N04::Propranolol::6","ppt":"N04","name":"Propranolol","classification":"β blocker","mechanism":"β 수용체 차단 → renin 분비↓","use":"고혈압/기전","keyline":"renin 분비 억제 예시","priority":"중요"},{"id":"N04::Aliskiren::10","ppt":"N04","name":"Aliskiren","classification":"Direct renin inhibitor","mechanism":"renin 직접 억제","use":"고혈압","keyline":"경구 renin 억제제","priority":"최우선"},{"id":"N04::Captopril::11","ppt":"N04","name":"Captopril","classification":"ACE inhibitor","mechanism":"Ang I→II 차단 + bradykinin 분해↓","use":"고혈압/신보호","keyline":"ACE inhibitor 대표","priority":"최우선"},{"id":"N04::Enalapril::12","ppt":"N04","name":"Enalapril","classification":"ACE inhibitor","mechanism":"Ang I→II 차단 + bradykinin↑","use":"고혈압","keyline":"기침/혈관부종 vignette 핵심","priority":"최우선"},{"id":"N04::Losartan::14","ppt":"N04","name":"Losartan","classification":"ARB / AT1 antagonist","mechanism":"AT1 경쟁적 차단","use":"고혈압/단백뇨성 CKD","keyline":"ACEI 기침 대체; AT1 signaling 문제","priority":"최우선"},{"id":"N04::Valsartan::15","ppt":"N04","name":"Valsartan","classification":"ARB","mechanism":"AT1 차단","use":"고혈압","keyline":"ARB 계열","priority":"중요"},{"id":"N04::Eprosartan::16","ppt":"N04","name":"Eprosartan","classification":"ARB","mechanism":"AT1 차단","use":"고혈압","keyline":"ARB 계열","priority":"중요"},{"id":"N04::Irbesartan::17","ppt":"N04","name":"Irbesartan","classification":"ARB","mechanism":"AT1 차단","use":"고혈압/신보호","keyline":"ARB 계열","priority":"중요"},{"id":"N04::Candesartan::18","ppt":"N04","name":"Candesartan","classification":"ARB","mechanism":"AT1 차단","use":"고혈압","keyline":"ARB 계열","priority":"중요"},{"id":"N04::Telmisartan::19","ppt":"N04","name":"Telmisartan","classification":"ARB","mechanism":"AT1 차단","use":"고혈압","keyline":"ARB 계열","priority":"중요"},{"id":"N04::Desmopressin (DDAVP)::21","ppt":"N04","name":"Desmopressin (DDAVP)","classification":"V2-selective vasopressin analog","mechanism":"V2(Gs) → 항이뇨","use":"중추성 요붕증","keyline":"항이뇨 효과가 승압보다 매우 큼","priority":"최우선"},{"id":"N04::Terlipressin::23","ppt":"N04","name":"Terlipressin","classification":"V1 agonist/prodrug-like analog","mechanism":"lysine vasopressin으로 전환; V1 작용","use":"혈관수축 관련","keyline":"반감기 길음","priority":"중요"},{"id":"N04::Tolvaptan::26","ppt":"N04","name":"Tolvaptan","classification":"V2 antagonist","mechanism":"V2 차단 → aquaresis","use":"저나트륨혈증","keyline":"V2 selective vaptan","priority":"최우선"},{"id":"N04::Conivaptan::27","ppt":"N04","name":"Conivaptan","classification":"V1a/V2 antagonist","mechanism":"V1a+V2 차단","use":"저나트륨혈증","keyline":"두 수용체 차단","priority":"최우선"},{"id":"N04::Carperitide::28","ppt":"N04","name":"Carperitide","classification":"Recombinant ANP","mechanism":"NPR-A/GC-cGMP","use":"심부전(일본)","keyline":"재조합 ANP","priority":"최우선"},{"id":"N04::Nesiritide::29","ppt":"N04","name":"Nesiritide","classification":"Recombinant BNP","mechanism":"NPR-A/GC-cGMP","use":"급성 비대상성 심부전","keyline":"재조합 BNP","priority":"최우선"},{"id":"N04::Ularitide::30","ppt":"N04","name":"Ularitide","classification":"Synthetic urodilatin","mechanism":"natriuretic peptide 작용","use":"급성 심부전 연구","keyline":"합성 urodilatin","priority":"중요"},{"id":"N05::Aspirin (ASA)::1","ppt":"N05","name":"Aspirin (ASA)","classification":"Salicylate NSAID","mechanism":"COX-1/2 serine acetylation → 비가역 억제","use":"진통·해열·항염증; 항혈소판","keyline":"Reye, salicylism, 산-염기, platelet 8–12 d","priority":"최우선"},{"id":"N05::Glucocorticoids::2","ppt":"N05","name":"Glucocorticoids","classification":"Steroidal anti-inflammatory class","mechanism":"PLA2 억제","use":"강력한 항염증","keyline":"NSAID와 작용점 구별","priority":"중요"},{"id":"N05::Celecoxib::3","ppt":"N05","name":"Celecoxib","classification":"COX-2 selective NSAID","mechanism":"COX-2 선택 억제","use":"OA/RA","keyline":"GI↓, 심장보호 X, CV 주의","priority":"최우선"},{"id":"N05::Etoricoxib::4","ppt":"N05","name":"Etoricoxib","classification":"Coxib","mechanism":"COX-2 선택 억제","use":"OA/RA/급성 통풍","keyline":"국내 coxib 3종","priority":"최우선"},{"id":"N05::Polmacoxib::5","ppt":"N05","name":"Polmacoxib","classification":"Coxib","mechanism":"COX-2 억제","use":"골관절염","keyline":"국내개발; 국내 coxib 3종","priority":"최우선"},{"id":"N05::Rofecoxib::6","ppt":"N05","name":"Rofecoxib","classification":"Coxib (withdrawn)","mechanism":"COX-2 선택 억제","use":"과거","keyline":"CV 혈전 위험으로 철수","priority":"최우선"},{"id":"N05::Valdecoxib::7","ppt":"N05","name":"Valdecoxib","classification":"Coxib (withdrawn)","mechanism":"COX-2 선택 억제","use":"과거","keyline":"CV 혈전 위험으로 철수","priority":"최우선"},{"id":"N05::Zileuton::9","ppt":"N05","name":"Zileuton","classification":"5-LOX inhibitor","mechanism":"5-LOX 억제","use":"천식","keyline":"COX와 작용점 구별용","priority":"중요"},{"id":"N05::Misoprostol::10","ppt":"N05","name":"Misoprostol","classification":"PGE1 analog","mechanism":"위점막 보호","use":"NSAID 유발 궤양 예방","keyline":"설사; 위장관 고위험 병용","priority":"최우선"},{"id":"N05::Omeprazole::11","ppt":"N05","name":"Omeprazole","classification":"PPI","mechanism":"H+/K+ ATPase 억제","use":"NSAID 관련 궤양 예방/치료","keyline":"위장관 보호 병용","priority":"중요"},{"id":"N05::Magnesium choline salicylate::12","ppt":"N05","name":"Magnesium choline salicylate","classification":"Nonacetylated salicylate","mechanism":"COX 억제 약함","use":"COX 부작용 우려 환자","keyline":"천식/출혈성질환/신기능 이상 고려","priority":"중요"},{"id":"N05::Sodium salicylate::13","ppt":"N05","name":"Sodium salicylate","classification":"Nonacetylated salicylate","mechanism":"COX 억제 약함","use":"항염증","keyline":"COX 부작용 우려 시","priority":"중요"},{"id":"N05::Salicylsalicylate / Salsalate::14","ppt":"N05","name":"Salicylsalicylate / Salsalate","classification":"Nonacetylated salicylate","mechanism":"salicylate로 가수분해","use":"항염증","keyline":"비아세틸 salicylate","priority":"중요"},{"id":"N05::Mesalamine (5-ASA)::17","ppt":"N05","name":"Mesalamine (5-ASA)","classification":"5-ASA","mechanism":"국소 항염증","use":"IBD","keyline":"좌약·관장","priority":"중요"},{"id":"N05::Sulfasalazine::19","ppt":"N05","name":"Sulfasalazine","classification":"5-ASA + sulfapyridine","mechanism":"항염증/DMARD","use":"IBD, RA","keyline":"N06 DMARD와 연결","priority":"중요"},{"id":"N05::Diclofenac::20","ppt":"N05","name":"Diclofenac","classification":"Acetic acid NSAID","mechanism":"비선택 COX 억제","use":"OA/RA/통증","keyline":"간효소 상승 비교적 흔함","priority":"중요"},{"id":"N05::Diflunisal::21","ppt":"N05","name":"Diflunisal","classification":"Salicylate derivative NSAID","mechanism":"COX 억제","use":"항염증/통증","keyline":"해열 거의 X; uricosuric","priority":"최우선"},{"id":"N05::Etodolac::22","ppt":"N05","name":"Etodolac","classification":"Acetic acid NSAID","mechanism":"COX-2:COX-1 약 10:1","use":"OA/RA","keyline":"위점막 PGE2 억제 적어 GI↓","priority":"중요"},{"id":"N05::Fenoprofen::23","ppt":"N05","name":"Fenoprofen","classification":"Propionic acid NSAID","mechanism":"COX 억제","use":"통증/염증","keyline":"interstitial nephritis 연관 가장 큼","priority":"최우선"},{"id":"N05::Flurbiprofen::24","ppt":"N05","name":"Flurbiprofen","classification":"Propionic acid NSAID","mechanism":"S(-) 비선택 COX 억제","use":"RA/AS/gout/OA; 안과","keyline":"chiral conversion X","priority":"중요"},{"id":"N05::Ibuprofen::25","ppt":"N05","name":"Ibuprofen","classification":"Propionic acid NSAID","mechanism":"비선택 COX 억제","use":"통증/발열/염증","keyline":"활성형 S(+)","priority":"중요"},{"id":"N05::Indomethacin::26","ppt":"N05","name":"Indomethacin","classification":"Indole NSAID","mechanism":"COX-1 우세; 강력 COX 억제","use":"gout, AS, Bartter","keyline":"GI/CNS 독성; Bartter PGE2 억제","priority":"최우선"},{"id":"N05::Ketoprofen::27","ppt":"N05","name":"Ketoprofen","classification":"Propionic acid NSAID","mechanism":"COX + lipoxygenase 억제","use":"RA/gout/월경통","keyline":"Probenecid가 반감기 연장","priority":"중요"},{"id":"N05::Ketorolac::28","ppt":"N05","name":"Ketorolac","classification":"NSAID analgesic","mechanism":"COX 억제","use":"중등도 통증; opioid-sparing","keyline":"5일 이상 → 궤양/신장합병증","priority":"최우선"},{"id":"N05::Meclofenamate::29","ppt":"N05","name":"Meclofenamate","classification":"Fenamate NSAID","mechanism":"COX + PLA2 억제","use":"염증/통증","keyline":"설사·복통; 항응고제 효과↑","priority":"중요"},{"id":"N05::Mefenamic acid::30","ppt":"N05","name":"Mefenamic acid","classification":"Fenamate NSAID","mechanism":"COX + PLA2 억제","use":"통증","keyline":"GI 부작용","priority":"중요"},{"id":"N05::Meloxicam::31","ppt":"N05","name":"Meloxicam","classification":"Oxicam/enolcarboxamide","mechanism":"7.5 mg에서 COX-2 우선 억제","use":"OA/RA","keyline":"t1/2 15–20 h; 1일 1회","priority":"최우선"},{"id":"N05::Nabumetone::32","ppt":"N05","name":"Nabumetone","classification":"Nonacidic NSAID prodrug","mechanism":"간에서 활성 산성 대사물로 전환","use":"OA/RA","keyline":"유일한 비산성 NSAID; GI ulcer↓","priority":"최우선"},{"id":"N05::Naproxen::33","ppt":"N05","name":"Naproxen","classification":"Propionic acid NSAID","mechanism":"비선택 COX 억제","use":"류마티스 질환","keyline":"t1/2 14 h; ototoxicity","priority":"최우선"},{"id":"N05::Oxaprozin::34","ppt":"N05","name":"Oxaprozin","classification":"Propionic acid NSAID","mechanism":"COX 억제","use":"염증/통풍","keyline":"t1/2 40–60 h; 약한 uricosuric","priority":"중요"},{"id":"N05::Phenylbutazone::35","ppt":"N05","name":"Phenylbutazone","classification":"Pyrazolone NSAID","mechanism":"COX 억제","use":"과거","keyline":"무과립구증·재생불량빈혈 → 중단","priority":"최우선"},{"id":"N05::Piroxicam::36","ppt":"N05","name":"Piroxicam","classification":"Oxicam NSAID","mechanism":"COX-1 우세/비선택","use":"RA/OA","keyline":"t1/2 45–50 h; GI/CNS 독성","priority":"중요"},{"id":"N05::Sulindac::37","ppt":"N05","name":"Sulindac","classification":"Acetic acid NSAID prodrug","mechanism":"sulfoxide→active sulfide","use":"염증","keyline":"COX-1 우세; 장간순환","priority":"중요"},{"id":"N06::Piroxicam::1","ppt":"N06","name":"Piroxicam","classification":"Oxicam NSAID","mechanism":"비선택 COX 억제","use":"RA/OA","keyline":"t1/2 45–50 h","priority":"중요"},{"id":"N06::Rofecoxib::2","ppt":"N06","name":"Rofecoxib","classification":"COX-2 selective NSAID","mechanism":"COX-2 선택 억제","use":"과거 OA","keyline":"2004 CV 혈전 위험으로 철수","priority":"최우선"},{"id":"N06::Valdecoxib::3","ppt":"N06","name":"Valdecoxib","classification":"COX-2 selective NSAID","mechanism":"COX-2 선택 억제","use":"과거","keyline":"2005 철수","priority":"최우선"},{"id":"N06::Lumiracoxib::4","ppt":"N06","name":"Lumiracoxib","classification":"COX-2 selective NSAID","mechanism":"COX-2 선택 억제","use":"과거","keyline":"간부전 문제로 철수","priority":"중요"},{"id":"N06::Celecoxib::5","ppt":"N06","name":"Celecoxib","classification":"COX-2 selective NSAID","mechanism":"COX-2 선택 억제","use":"OA/RA","keyline":"국내 coxib","priority":"최우선"},{"id":"N06::Etoricoxib::6","ppt":"N06","name":"Etoricoxib","classification":"Coxib","mechanism":"COX-2 선택성 높음","use":"OA/RA/gout","keyline":"1일 1회; 간기능/CV 주의","priority":"최우선"},{"id":"N06::Polmacoxib::7","ppt":"N06","name":"Polmacoxib","classification":"Coxib","mechanism":"COX-2 억제","use":"OA","keyline":"국내개발 coxib","priority":"최우선"},{"id":"N06::Sulindac::10","ppt":"N06","name":"Sulindac","classification":"NSAID prodrug","mechanism":"sulfoxide→active sulfide","use":"염증","keyline":"장간순환","priority":"중요"},{"id":"N06::Tolmetin::11","ppt":"N06","name":"Tolmetin","classification":"Nonselective NSAID","mechanism":"COX 억제","use":"염증","keyline":"통풍 효과 X; 혈소판 응집 효과 X","priority":"중요"},{"id":"N06::Omeprazole::12","ppt":"N06","name":"Omeprazole","classification":"PPI","mechanism":"H+/K+ ATPase 억제","use":"NSAID GI 보호","keyline":"NSAID 지속 필요 시 병용","priority":"중요"},{"id":"N06::Misoprostol::13","ppt":"N06","name":"Misoprostol","classification":"PGE1 analog","mechanism":"위점막 보호","use":"NSAID GI 보호","keyline":"PPI와 기전 다름","priority":"최우선"},{"id":"N06::Methotrexate (MTX)::14","ppt":"N06","name":"Methotrexate (MTX)","classification":"csDMARD","mechanism":"저용량 항염증/엽산경로 관련; AICAR 등","use":"RA 1차 선택","keyline":"Folic acid 병용; 독성 모니터링","priority":"최우선"},{"id":"N06::Folic acid::15","ppt":"N06","name":"Folic acid","classification":"MTX toxicity modifier","mechanism":"엽산 보충","use":"MTX 부작용 감소","keyline":"구내궤양·GI 등 감소","priority":"최우선"},{"id":"N06::Abatacept::16","ppt":"N06","name":"Abatacept","classification":"bDMARD fusion protein","mechanism":"CTLA-4 부위가 CD80/86 결합 → CD28 costimulation 차단","use":"RA","keyline":"TNF inhibitor와 병용 시 감염↑","priority":"최우선"},{"id":"N06::Azathioprine::17","ppt":"N06","name":"Azathioprine","classification":"csDMARD","mechanism":"6-thioguanine → B/T 기능·IgG·IL-2 억제","use":"RA/자가면역","keyline":"TPMT; 골수억제/감염","priority":"중요"},{"id":"N06::Chloroquine::18","ppt":"N06","name":"Chloroquine","classification":"csDMARD/antimalarial","mechanism":"면역조절; lysosome 안정화 등","use":"RA/SLE","keyline":"안구독성","priority":"중요"},{"id":"N06::Hydroxychloroquine::19","ppt":"N06","name":"Hydroxychloroquine","classification":"csDMARD/antimalarial","mechanism":"면역조절","use":"RA/SLE","keyline":"안구독성 → 안과검진","priority":"최우선"},{"id":"N06::Cyclophosphamide::20","ppt":"N06","name":"Cyclophosphamide","classification":"csDMARD/alkylating agent","mechanism":"DNA cross-link","use":"중증 자가면역","keyline":"골수억제·불임·출혈성 방광염","priority":"중요"},{"id":"N06::Cyclosporine::21","ppt":"N06","name":"Cyclosporine","classification":"csDMARD/calcineurin inhibitor","mechanism":"T-cell 기능 억제","use":"RA","keyline":"신독성·고혈압·고K·잇몸증식·다모증","priority":"최우선"},{"id":"N06::Tacrolimus::22","ppt":"N06","name":"Tacrolimus","classification":"csDMARD/calcineurin inhibitor","mechanism":"T-cell 억제","use":"RA/면역억제","keyline":"분류표에 포함","priority":"중요"},{"id":"N06::Leflunomide::23","ppt":"N06","name":"Leflunomide","classification":"csDMARD prodrug","mechanism":"A77-1726 → DHODH 억제 → pyrimidine 합성↓","use":"RA","keyline":"t1/2 길음; 간효소↑/설사","priority":"최우선"},{"id":"N06::Sulfasalazine::24","ppt":"N06","name":"Sulfasalazine","classification":"csDMARD","mechanism":"면역조절/5-ASA 관련","use":"RA","keyline":"비생물 DMARD","priority":"중요"},{"id":"N06::Rituximab::26","ppt":"N06","name":"Rituximab","classification":"bDMARD","mechanism":"anti-CD20 → B cell 제거","use":"RA","keyline":"chimeric mAb","priority":"최우선"},{"id":"N06::Tocilizumab::27","ppt":"N06","name":"Tocilizumab","classification":"bDMARD","mechanism":"anti-IL-6 receptor","use":"RA","keyline":"CYP450 activity 변화/상호작용 주의","priority":"최우선"},{"id":"N06::Adalimumab::28","ppt":"N06","name":"Adalimumab","classification":"Anti-TNF bDMARD","mechanism":"human anti-TNF-α mAb","use":"RA/건선","keyline":"잠복결핵·감염; 완전 인간형","priority":"최우선"},{"id":"N06::Certolizumab::29","ppt":"N06","name":"Certolizumab","classification":"Anti-TNF bDMARD","mechanism":"PEGylated Fab; Fc 없음","use":"RA/Crohn","keyline":"보체/ADCC 없음","priority":"최우선"},{"id":"N06::Etanercept::30","ppt":"N06","name":"Etanercept","classification":"Anti-TNF bDMARD","mechanism":"p75 TNF receptor-IgG1 Fc fusion","use":"RA/건선/AS","keyline":"융합단백","priority":"최우선"},{"id":"N06::Golimumab::31","ppt":"N06","name":"Golimumab","classification":"Anti-TNF bDMARD","mechanism":"human anti-TNF mAb","use":"RA/PsA/AS","keyline":"잠복결핵 검사","priority":"최우선"},{"id":"N06::Infliximab::32","ppt":"N06","name":"Infliximab","classification":"Anti-TNF bDMARD","mechanism":"chimeric anti-TNF mAb","use":"RA/AS/Crohn","keyline":"항키메라항체; MTX 병용 감소","priority":"최우선"},{"id":"N06::Baricitinib::33","ppt":"N06","name":"Baricitinib","classification":"tsDMARD JAK inhibitor","mechanism":"JAK1/JAK2 억제","use":"RA","keyline":"경구 저분자","priority":"최우선"},{"id":"N06::Tofacitinib::34","ppt":"N06","name":"Tofacitinib","classification":"tsDMARD JAK inhibitor","mechanism":"JAK1/JAK3 억제","use":"RA/건선","keyline":"경구; 다른 강한 면역억제제 병용 X","priority":"최우선"},{"id":"N06::Upadacitinib::35","ppt":"N06","name":"Upadacitinib","classification":"tsDMARD JAK inhibitor","mechanism":"JAK1 선택 억제","use":"RA","keyline":"경구 tsDMARD","priority":"최우선"},{"id":"N06::Anakinra::36","ppt":"N06","name":"Anakinra","classification":"IL-1 pathway bDMARD","mechanism":"recombinant IL-1 receptor antagonist","use":"RA/자가염증","keyline":"IL-1RA 제제","priority":"최우선"},{"id":"N06::Canakinumab::37","ppt":"N06","name":"Canakinumab","classification":"IL-1 pathway bDMARD","mechanism":"anti-IL-1β human mAb","use":"Still병/통풍 등","keyline":"IL-1β 직접 중화","priority":"최우선"},{"id":"N06::Rilonacept::38","ppt":"N06","name":"Rilonacept","classification":"IL-1 trap-like bDMARD","mechanism":"IL-1 receptor ligand-binding recombinant protein","use":"자가염증","keyline":"주로 IL-1β 중화","priority":"중요"},{"id":"N06::Prednisone / Glucocorticoid::40","ppt":"N06","name":"Prednisone / Glucocorticoid","classification":"Anti-inflammatory steroid","mechanism":"PLA2 억제 + COX-2 발현 억제","use":"RA bridge therapy","keyline":"장기 골절·감염·백내장","priority":"중요"},{"id":"N06::Acetaminophen::41","ppt":"N06","name":"Acetaminophen","classification":"Nonopioid analgesic/antipyretic","mechanism":"말초 COX 억제 약함","use":"진통·해열","keyline":"항염증 거의 X; platelet/GI 영향 적음","priority":"최우선"},{"id":"N06::N-Acetylcysteine (NAC)::42","ppt":"N06","name":"N-Acetylcysteine (NAC)","classification":"Acetaminophen antidote","mechanism":"glutathione 전구체 → NAPQI 중화","use":"AAP overdose","keyline":"1일 이내 투여 포인트","priority":"최우선"},{"id":"N06::Colchicine::43","ppt":"N06","name":"Colchicine","classification":"Antigout anti-inflammatory","mechanism":"tubulin 결합 → microtubule 중합↓ → leukocyte 이동/탐식↓","use":"급성 통풍/예방","keyline":"요산 농도 자체엔 영향 X; 치료범위 좁음","priority":"최우선"},{"id":"N06::Indomethacin::44","ppt":"N06","name":"Indomethacin","classification":"NSAID","mechanism":"COX 억제 + urate crystal phagocytosis 억제","use":"급성 통풍","keyline":"대표 NSAID","priority":"최우선"},{"id":"N06::Probenecid::45","ppt":"N06","name":"Probenecid","classification":"Uricosuric","mechanism":"근위세뇨관 urate 재흡수/유기산 수송 영향","use":"재발 방지","keyline":"penicillin/MTX/indomethacin 분비 억제","priority":"최우선"},{"id":"N06::Allopurinol::46","ppt":"N06","name":"Allopurinol","classification":"Xanthine oxidase inhibitor","mechanism":"요산 생성↓","use":"만성/결절성 통풍","keyline":"6-MP 용량 75% 감소 필요","priority":"최우선"},{"id":"N06::Febuxostat::47","ppt":"N06","name":"Febuxostat","classification":"Nonpurine XO inhibitor","mechanism":"xanthine oxidase 억제","use":"통풍; 신기능 저하 동반","keyline":"비퓨린계","priority":"최우선"},{"id":"N06::Pegloticase::48","ppt":"N06","name":"Pegloticase","classification":"Recombinant urate oxidase","mechanism":"uric acid → allantoin","use":"불응성 만성 통풍","keyline":"PEGylated; 요산 자체 분해","priority":"최우선"},{"id":"N06::Rasburicase::49","ppt":"N06","name":"Rasburicase","classification":"Recombinant urate oxidase","mechanism":"uric acid → allantoin","use":"tumor lysis hyperuricemia","keyline":"항암치료 TLS","priority":"최우선"},{"id":"N06::6-Mercaptopurine::50","ppt":"N06","name":"6-Mercaptopurine","classification":"Purine antimetabolite","mechanism":"XO 대사 관련","use":"상호작용","keyline":"Allopurinol 병용 시 용량 크게 감량","priority":"중요"},{"id":"N07::Somatropin::1","ppt":"N07","name":"Somatropin","classification":"Recombinant human GH","mechanism":"GH receptor → JAK2/STAT/MAPK/PI3K; IGF-1↑","use":"GH 결핍, Turner, CKD 성장부전 등","keyline":"현재 표준 rhGH; 1일 1회 SC","priority":"최우선"},{"id":"N07::Sermorelin::3","ppt":"N07","name":"Sermorelin","classification":"Synthetic GHRH(1-29)","mechanism":"GHRH receptor 자극","use":"GH 결핍 감별 진단","keyline":"시상하부성 vs 뇌하수체성 감별; 치료제로는 거의 X","priority":"최우선"},{"id":"N07::Mecasermin::4","ppt":"N07","name":"Mecasermin","classification":"Recombinant IGF-1","mechanism":"IGF-1 receptor 직접 활성","use":"Laron형/중증 원발성 IGF-1 결핍","keyline":"주요 부작용 저혈당","priority":"최우선"},{"id":"N07::Somatostatin::6","ppt":"N07","name":"Somatostatin","classification":"GH inhibitory peptide","mechanism":"SSTR → Gi → cAMP↓/K+ channel↑","use":"GH 억제 생리","keyline":"생합성보다는 분비 억제; 반감기 짧음","priority":"최우선"},{"id":"N07::Octreotide::7","ppt":"N07","name":"Octreotide","classification":"Somatostatin analog","mechanism":"SSTR2/5 agonist → GH 분비↓","use":"Acromegaly","keyline":"담석·설사·지방변; bromocriptine보다 효과적","priority":"최우선"},{"id":"N07::Lanreotide::8","ppt":"N07","name":"Lanreotide","classification":"Long-acting somatostatin analog","mechanism":"SSTR agonist","use":"Acromegaly","keyline":"28일 간격 서방형","priority":"최우선"},{"id":"N07::Pegvisomant::9","ppt":"N07","name":"Pegvisomant","classification":"GH receptor antagonist","mechanism":"기능적 receptor dimerization 차단","use":"Acromegaly","keyline":"GH가 아니라 IGF-1로 모니터; 종양/LFT 추적","priority":"최우선"},{"id":"N07::Bromocriptine::10","ppt":"N07","name":"Bromocriptine","classification":"D2 agonist (ergot)","mechanism":"D2 자극","use":"고프로락틴혈증; acromegaly 보조","keyline":"정상인 GH↑ 가능 vs acromegaly GH↓","priority":"최우선"},{"id":"N07::Cabergoline::11","ppt":"N07","name":"Cabergoline","classification":"D2 agonist (ergot)","mechanism":"D2 자극","use":"고프로락틴혈증; acromegaly 보조","keyline":"장시간 작용","priority":"최우선"},{"id":"N07::Quinagolide::12","ppt":"N07","name":"Quinagolide","classification":"Non-ergot D2 agonist","mechanism":"D2 자극","use":"고프로락틴혈증","keyline":"유럽 승인 비맥각계","priority":"중요"},{"id":"N07::Metoclopramide::13","ppt":"N07","name":"Metoclopramide","classification":"D2 antagonist","mechanism":"D2 차단 → prolactin↑","use":"약물성 고PRL 원인","keyline":"고프로락틴혈증 유발 예시","priority":"중요"},{"id":"N07::Oxytocin::14","ppt":"N07","name":"Oxytocin","classification":"Posterior pituitary peptide","mechanism":"oxytocin receptor 자극","use":"분만 유도/촉진; 산후출혈","keyline":"milk ejection + uterine contraction","priority":"중요"},{"id":"N07::Atosiban::15","ppt":"N07","name":"Atosiban","classification":"Oxytocin receptor antagonist","mechanism":"oxytocin receptor 차단","use":"조기진통 억제","keyline":"미국 외 사용; FDA 미승인 언급","priority":"중요"},{"id":"N07::Vasopressin (ADH)::16","ppt":"N07","name":"Vasopressin (ADH)","classification":"V1/V2 agonist","mechanism":"V1 혈관수축, V2 항이뇨","use":"생리/요붕증 관련","keyline":"9 aa peptide","priority":"중요"},{"id":"N07::Desmopressin (DDAVP)::17","ppt":"N07","name":"Desmopressin (DDAVP)","classification":"V2-selective analog","mechanism":"V2 → 집합관 수분재흡수↑; vWF/FVIII 방출","use":"중추성 DI, 야뇨증, 경증 hemophilia A/vWD","keyline":"과용 → 저Na·경련; 수분제한","priority":"최우선"},{"id":"N07::Fenfluramine::22","ppt":"N07","name":"Fenfluramine","classification":"Old anti-obesity serotonergic drug","mechanism":"중추 serotonergic 식욕억제","use":"비만(과거)","keyline":"폐고혈압·판막병 → 철수","priority":"중요"},{"id":"N07::Dexfenfluramine::23","ppt":"N07","name":"Dexfenfluramine","classification":"Old anti-obesity serotonergic drug","mechanism":"serotonergic 식욕억제","use":"비만(과거)","keyline":"폐고혈압·판막병 → 철수","priority":"중요"},{"id":"N07::Sibutramine::25","ppt":"N07","name":"Sibutramine","classification":"Old anti-obesity drug","mechanism":"monoamine reuptake 억제 계열","use":"비만(과거)","keyline":"심혈관 사건 → 철수","priority":"중요"},{"id":"N07::Rimonabant::26","ppt":"N07","name":"Rimonabant","classification":"CB1 antagonist","mechanism":"endocannabinoid 식욕 경로 억제","use":"비만(과거)","keyline":"정신과 부작용 → 철수","priority":"중요"},{"id":"N07::Orlistat::27","ppt":"N07","name":"Orlistat","classification":"GI lipase inhibitor","mechanism":"중성지방 분해↓ → 지방흡수 약 30%↓","use":"비만","keyline":"지방변·변실금·지용성 비타민↓","priority":"최우선"},{"id":"N07::Liraglutide::28","ppt":"N07","name":"Liraglutide","classification":"GLP-1 receptor agonist","mechanism":"식욕중추 작용 + 위배출 지연","use":"비만","keyline":"매일 투여","priority":"최우선"},{"id":"N07::Semaglutide::29","ppt":"N07","name":"Semaglutide","classification":"GLP-1 receptor agonist","mechanism":"식욕↓ + 위배출 지연","use":"비만","keyline":"주 1회; 강의 약 15% 감량","priority":"최우선"},{"id":"N07::Tirzepatide::30","ppt":"N07","name":"Tirzepatide","classification":"GIP/GLP-1 dual agonist","mechanism":"두 incretin receptor 동시 작용","use":"비만","keyline":"강의 약 20% 안팎 감량","priority":"최우선"},{"id":"N08::Perchlorate::1","ppt":"N08","name":"Perchlorate","classification":"Anion NIS inhibitor","mechanism":"NIS에서 iodide와 경쟁 → trapping↓","use":"iodide-induced hyperthyroidism 등 제한적","keyline":"aplastic anemia 때문에 거의 사용 X","priority":"최우선"},{"id":"N08::Pertechnetate::2","ppt":"N08","name":"Pertechnetate","classification":"Anion NIS inhibitor","mechanism":"NIS 경쟁 차단","use":"주로 진단/기전","keyline":"iodide uptake 억제","priority":"최우선"},{"id":"N08::Thiocyanate::3","ppt":"N08","name":"Thiocyanate","classification":"Anion NIS inhibitor","mechanism":"NIS 경쟁 차단","use":"기전/역사","keyline":"풍토성 goiter와 연관; 임상 거의 X","priority":"최우선"},{"id":"N08::Methimazole::4","ppt":"N08","name":"Methimazole","classification":"Thioamide","mechanism":"TPO 억제 → organification/coupling↓","use":"대부분 hyperthyroidism 1차","keyline":"PTU보다 potency 약 10×; agranulocytosis; cholestatic injury","priority":"최우선"},{"id":"N08::Propylthiouracil (PTU)::5","ppt":"N08","name":"Propylthiouracil (PTU)","classification":"Thioamide","mechanism":"TPO 억제 + peripheral D1 억제 → T4→T3↓","use":"1삼분기, thyroid storm","keyline":"중증 hepatotoxicity; 특수상황 선택","priority":"최우선"},{"id":"N08::Carbimazole::6","ppt":"N08","name":"Carbimazole","classification":"Thioamide prodrug","mechanism":"체내에서 methimazole로 전환","use":"hyperthyroidism(유럽/영국)","keyline":"methimazole 전구약물","priority":"중요"},{"id":"N08::High-dose iodide::7","ppt":"N08","name":"High-dose iodide","classification":"High-dose iodine therapy","mechanism":"Wolff–Chaikoff + hormone release 억제 + 혈관분포↓","use":"thyroid storm, 수술 전 7–10일","keyline":"유일하게 즉시 분비 억제; thioamide 후 사용; escape","priority":"최우선"},{"id":"N08::Radioactive iodine (¹³¹I)::8","ppt":"N08","name":"Radioactive iodine (¹³¹I)","classification":"Radioiodine","mechanism":"NIS로 농축 → β선으로 follicular cell 파괴","use":"Graves/hyperthyroidism","keyline":"t1/2 약 8 d; 임신/수유 금기; 후 hypothyroidism","priority":"최우선"},{"id":"N08::Propranolol::9","ppt":"N08","name":"Propranolol","classification":"β blocker","mechanism":"교감증상 억제; 고용량은 T4→T3 전환 억제","use":"thyrotoxicosis 증상 조절","keyline":"생합성 자체는 억제 X","priority":"최우선"},{"id":"N08::Atenolol::10","ppt":"N08","name":"Atenolol","classification":"β1-selective blocker","mechanism":"교감증상 억제","use":"thyrotoxicosis 증상 조절","keyline":"보조요법","priority":"중요"},{"id":"N08::Ipodate::11","ppt":"N08","name":"Ipodate","classification":"Iodinated contrast / conversion inhibitor","mechanism":"T4→T3 전환 억제","use":"thyrotoxicosis 보조/기전","keyline":"rT3 증가 관련","priority":"중요"},{"id":"N08::Levothyroxine (LT4)::13","ppt":"N08","name":"Levothyroxine (LT4)","classification":"Synthetic T4","mechanism":"prohormone 보충 → 필요 시 T3 전환","use":"hypothyroidism 표준","keyline":"t1/2 6–7 d; 공복 30–60분; TSH 모니터","priority":"최우선"},{"id":"N08::Liothyronine (LT3)::14","ppt":"N08","name":"Liothyronine (LT3)","classification":"Synthetic T3","mechanism":"활성형 T3 직접 보충","use":"myxedema coma","keyline":"빠른 작용; t1/2 1 d; 심장독성 → 장기요법 부적합","priority":"최우선"},{"id":"N08::Hydrocortisone::15","ppt":"N08","name":"Hydrocortisone","classification":"Glucocorticoid","mechanism":"GC 보충","use":"myxedema coma 병용","keyline":"부신부전 동반 가능성 때문에 병용","priority":"중요"},{"id":"N08::Amiodarone::16","ppt":"N08","name":"Amiodarone","classification":"T4→T3 conversion inhibitor/iodine-rich drug","mechanism":"deiodination 억제; rT3↑","use":"상호작용/갑상샘 이상","keyline":"LT4 용량/갑상샘 해석에 영향","priority":"중요"},{"id":"N08::Cholestyramine::20","ppt":"N08","name":"Cholestyramine","classification":"Bile-acid sequestrant","mechanism":"LT4 장흡수↓","use":"상호작용","keyline":"LT4 용량↑ 필요 가능","priority":"중요"},{"id":"N08::Calcium carbonate::21","ppt":"N08","name":"Calcium carbonate","classification":"LT4 absorption inhibitor","mechanism":"LT4 흡수 방해","use":"상호작용","keyline":"LT4와 최소 4 h 간격","priority":"중요"},{"id":"N08::Iron preparations::22","ppt":"N08","name":"Iron preparations","classification":"LT4 absorption inhibitor","mechanism":"LT4 흡수 방해","use":"상호작용","keyline":"LT4와 최소 4 h 간격","priority":"중요"},{"id":"N08::Estrogen::24","ppt":"N08","name":"Estrogen","classification":"TBG-increasing drug/hormone","mechanism":"간 TBG 합성↑","use":"TH 검사/용량 영향","keyline":"total TH↑; free TH는 feedback으로 정상화","priority":"중요"},{"id":"N08::Metformin::29","ppt":"N08","name":"Metformin","classification":"TSH-lowering drug","mechanism":"free T4 변화 없이 TSH↓ 가능","use":"검사 해석","keyline":"TSH 해석 주의","priority":"중요"}];
+const PPT_TOPICS = {"N01":"Histamine · H1/H2 · Bradykinin","N02":"Serotonin · Ergot alkaloids","N03":"Eicosanoids · PAF · NO","N04":"Vasoactive peptides","N05":"NSAID Part 1","N06":"NSAID Part 2 · DMARD · Gout","N07":"Pituitary/GH · PRL/ADH · Obesity","N08":"Thyroid hormone · Antithyroid drugs"};
+const PPTS = Object.keys(PPT_TOPICS);
+const TOP_ONLY_TOTAL = drugs.filter(d=>d.priority==="최우선").length;
+const TOP_IMPORTANT_TOTAL = drugs.length;
+
+const nameCounts = {};
+for(const d of drugs) nameCounts[d.name]=(nameCounts[d.name]||0)+1;
+
+let activeId=null, record=null, current=null, answered=false;
+let stage=1, currentHadWrong=false;
+const memoryStorage={};
+
+const $=id=>document.getElementById(id);
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function unique(arr){ return [...new Set(arr.filter(x=>x!==undefined && x!==null && x!==""))]; }
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function storageKey(id){ return "pharmPptHierarchyQuiz:v1:"+id; }
+function safeGet(key){
+  try{ return localStorage.getItem(key); }catch(e){ return memoryStorage[key] ?? null; }
+}
+function safeSet(key,val){
+  try{ localStorage.setItem(key,val); }catch(e){ memoryStorage[key]=val; }
+}
+function safeRemove(key){
+  try{ localStorage.removeItem(key); }catch(e){ delete memoryStorage[key]; }
+}
+
+function emptyRecord(){
+  return {
+    correct:0, attempts:0, completed:0,
+    favorites:[], wrongIds:[], completedHistory:[],
+    settings:{importance:"topImportant",mode:"all"},
+    contexts:{},
+    lastOpened:new Date().toISOString()
+  };
+}
+function normalizeRecord(obj){
+  const r=(obj && typeof obj==="object")?obj:emptyRecord();
+  r.correct=Number(r.correct||0);
+  r.attempts=Number(r.attempts||0);
+  r.completed=Number(r.completed||0);
+  if(!Array.isArray(r.favorites)) r.favorites=[];
+  if(!Array.isArray(r.wrongIds)) r.wrongIds=[];
+  if(!Array.isArray(r.completedHistory)) r.completedHistory=[];
+  if(!r.settings || typeof r.settings!=="object") r.settings={importance:"topImportant",mode:"all"};
+  if(!["topOnly","topImportant"].includes(r.settings.importance)) r.settings.importance="topImportant";
+  if(!["all","favorite","wrong"].includes(r.settings.mode)) r.settings.mode="all";
+  if(!r.contexts || typeof r.contexts!=="object") r.contexts={};
+  return r;
+}
+function loadRecord(id){
+  try{
+    const raw=safeGet(storageKey(id));
+    return normalizeRecord(raw?JSON.parse(raw):emptyRecord());
+  }catch(e){ return emptyRecord(); }
+}
+function saveRecord(){
+  if(!activeId||!record) return;
+  record.lastOpened=new Date().toISOString();
+  safeSet(storageKey(activeId),JSON.stringify(record));
+  updateUi();
+}
+function contextKey(importance=record.settings.importance,mode=record.settings.mode){
+  return `${importance}|${mode}`;
+}
+function getContext(key=contextKey()){
+  if(!record.contexts[key]){
+    record.contexts[key]={
+      round:1,deck:[],currentUid:null,stage:1,currentHadWrong:false,
+      completedThisRound:0,roundTotal:0,awaitingNextRound:false
+    };
+  }
+  const c=record.contexts[key];
+  c.round=Number(c.round||1);
+  if(!Array.isArray(c.deck)) c.deck=[];
+  c.currentUid ??= null;
+  c.stage=Number(c.stage||1);
+  c.currentHadWrong=!!c.currentHadWrong;
+  c.completedThisRound=Number(c.completedThisRound||0);
+  c.roundTotal=Number(c.roundTotal||0);
+  c.awaitingNextRound=!!c.awaitingNextRound;
+  return c;
+}
+
+function importancePool(importance=record.settings.importance){
+  return importance==="topOnly" ? drugs.filter(d=>d.priority==="최우선") : drugs;
+}
+function getPool(importance=record.settings.importance,mode=record.settings.mode){
+  let pool=importancePool(importance);
+  if(mode==="favorite"){
+    const s=new Set(record.favorites);
+    pool=pool.filter(d=>s.has(d.id));
+  }else if(mode==="wrong"){
+    const s=new Set(record.wrongIds);
+    pool=pool.filter(d=>s.has(d.id));
+  }
+  return pool;
+}
+function modeLabel(mode=record.settings.mode){
+  return mode==="favorite" ? "★ 즐겨찾기" : mode==="wrong" ? "오답만" : "전체";
+}
+function importanceLabel(v=record.settings.importance){
+  return v==="topOnly" ? "최우선만" : "최우선 + 중요";
+}
+
+function updateUi(){
+  if(!record) return;
+  const ctx=getContext();
+  const pool=getPool();
+  const valid=new Set(pool.map(d=>d.id));
+  const remainingDeck=ctx.deck.filter(id=>valid.has(id)).length;
+  const currentRemaining=ctx.currentUid && valid.has(ctx.currentUid) ? 1 : 0;
+
+  $("roundStat").textContent=ctx.round;
+  $("completedRoundStat").textContent=ctx.completedThisRound;
+  $("remainingStat").textContent=remainingDeck+currentRemaining;
+  $("score").textContent=`정답 ${record.correct} / ${record.attempts}`;
+
+  $("topOnlyCount").textContent=`(${TOP_ONLY_TOTAL})`;
+  $("topImportantCount").textContent=`(${TOP_IMPORTANT_TOTAL})`;
+
+  const base=importancePool();
+  const baseIds=new Set(base.map(d=>d.id));
+  const favN=record.favorites.filter(id=>baseIds.has(id)).length;
+  const wrongN=record.wrongIds.filter(id=>baseIds.has(id)).length;
+  $("allCount").textContent=`(${base.length})`;
+  $("favoriteCount").textContent=`(${favN})`;
+  $("wrongCount").textContent=`(${wrongN})`;
+
+  $("topOnlyBtn").classList.toggle("active",record.settings.importance==="topOnly");
+  $("topImportantBtn").classList.toggle("active",record.settings.importance==="topImportant");
+  for(const b of document.querySelectorAll("[data-mode]")){
+    b.classList.toggle("active",b.dataset.mode===record.settings.mode);
+  }
+  $("modePill").textContent=`${importanceLabel()} · ${modeLabel()}`;
+
+  renderHistory();
+  updateStar();
+}
+function renderHistory(){
+  const box=$("historyBox");
+  const arr=(record.completedHistory||[]).slice(0,10);
+  if(!arr.length){
+    box.innerHTML='<div class="note">아직 완료한 약물이 없어.</div>';
+    return;
+  }
+  box.innerHTML=arr.map(x=>{
+    const d=new Date(x.time);
+    const when=isNaN(d)?"":d.toLocaleString("ko-KR",{month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+    const star=(record.favorites||[]).includes(x.id)?"★ ":"";
+    return `<div class="histrow">${star}<b>${escapeHtml(x.drug)}</b> · ${escapeHtml(x.ppt)} · ${escapeHtml(x.priority)}<br><span style="color:#667085">${escapeHtml(x.classification)} · ${when}</span></div>`;
+  }).join("");
+}
+
+function startWithId(id){
+  activeId=id; record=loadRecord(id);
+  $("userIdText").textContent=id;
+  $("loginScreen").classList.add("hidden");
+  $("quizScreen").classList.remove("hidden");
+  saveRecord();
+  activateContext();
+}
+function tryLogin(){
+  const id=$("idInput").value.trim();
+  if(!/^\d{4}$/.test(id)){
+    $("loginMsg").textContent="숫자 4자리로 입력해.";
+    return;
+  }
+  $("loginMsg").textContent="";
+  startWithId(id);
+}
+$("idInput").addEventListener("input",e=>{
+  e.target.value=e.target.value.replace(/\D/g,"").slice(0,4);
+  $("loginMsg").textContent="";
+  if(e.target.value.length===4) tryLogin();
+});
+$("idInput").addEventListener("keydown",e=>{ if(e.key==="Enter") tryLogin(); });
+$("loginBtn").onclick=tryLogin;
+
+$("switchBtn").onclick=()=>{
+  saveRecord();
+  activeId=null;record=null;current=null;
+  $("quizScreen").classList.add("hidden");
+  $("roundOverlay").classList.add("hidden");
+  $("loginScreen").classList.remove("hidden");
+  $("idInput").value="";
+  $("idInput").focus();
+};
+
+function validateTargetSetting(importance,mode){
+  const pool=getPool(importance,mode);
+  if(pool.length) return true;
+  const msg=mode==="favorite" ? "이 범위에 즐겨찾기한 약물이 없어." :
+            mode==="wrong" ? "이 범위에 틀린 약물이 없어." :
+            "이 범위에 출제할 약물이 없어.";
+  alert(msg);
+  return false;
+}
+function setImportance(v){
+  if(v===record.settings.importance) return;
+  if(!validateTargetSetting(v,record.settings.mode)) return;
+  record.settings.importance=v;
+  current=null; answered=false;
+  saveRecord(); activateContext();
+}
+function setMode(v){
+  if(v===record.settings.mode) return;
+  if(!validateTargetSetting(record.settings.importance,v)) return;
+  record.settings.mode=v;
+  current=null; answered=false;
+  saveRecord(); activateContext();
+}
+$("topOnlyBtn").onclick=()=>setImportance("topOnly");
+$("topImportantBtn").onclick=()=>setImportance("topImportant");
+for(const b of document.querySelectorAll("[data-mode]")) b.onclick=()=>setMode(b.dataset.mode);
+
+function cleanContextAgainstPool(ctx,pool){
+  const valid=new Set(pool.map(d=>d.id));
+  ctx.deck=ctx.deck.filter(id=>valid.has(id));
+  if(ctx.currentUid && !valid.has(ctx.currentUid)){
+    ctx.currentUid=null;ctx.stage=1;ctx.currentHadWrong=false;
+  }
+}
+function initializeRound(ctx,pool){
+  ctx.deck=shuffle(pool.map(d=>d.id));
+  ctx.currentUid=null;
+  ctx.stage=1;
+  ctx.currentHadWrong=false;
+  ctx.completedThisRound=0;
+  ctx.roundTotal=pool.length;
+  ctx.awaitingNextRound=false;
+}
+function activateContext(){
+  const pool=getPool();
+  if(!pool.length){
+    if(record.settings.mode!=="all"){
+      record.settings.mode="all";
+      saveRecord();
+      return activateContext();
+    }
+    return;
+  }
+  const ctx=getContext();
+  cleanContextAgainstPool(ctx,pool);
+
+  if(ctx.awaitingNextRound){
+    current=null;
+    showRoundOverlay();
+    updateUi();
+    return;
+  }
+
+  if(!ctx.currentUid){
+    if(!ctx.deck.length) initializeRound(ctx,pool);
+    if(ctx.deck.length) ctx.currentUid=ctx.deck.shift();
+    ctx.stage=1;ctx.currentHadWrong=false;
+  }
+
+  current=drugs.find(d=>d.id===ctx.currentUid)||null;
+  stage=ctx.stage||1;
+  currentHadWrong=!!ctx.currentHadWrong;
+  saveRecord();
+  renderStage();
+}
+
+function distractorOptions(answer,primary=[],secondary=[],global=[]){
+  const chosen=[answer];
+  for(const pool of [primary,secondary,global]){
+    for(const x of shuffle(unique(pool))){
+      if(x!==answer && !chosen.includes(x)) chosen.push(x);
+      if(chosen.length===4) return shuffle(chosen);
+    }
+  }
+  return shuffle(chosen);
+}
+function optionsForStage(){
+  if(stage===1){
+    return shuffle(PPTS);
+  }
+  if(stage===2){
+    const samePpt=drugs.filter(d=>d.ppt===current.ppt).map(d=>d.classification);
+    const sameNameOther=drugs.filter(d=>d.name===current.name && d.id!==current.id).map(d=>d.classification);
+    return distractorOptions(current.classification,sameNameOther,samePpt,drugs.map(d=>d.classification));
+  }
+  if(stage===3){
+    const sameClass=drugs.filter(d=>d.ppt===current.ppt && d.classification===current.classification).map(d=>d.mechanism);
+    const samePpt=drugs.filter(d=>d.ppt===current.ppt).map(d=>d.mechanism);
+    return distractorOptions(current.mechanism,sameClass,samePpt,drugs.map(d=>d.mechanism));
+  }
+  const sameClass=drugs.filter(d=>d.ppt===current.ppt && d.classification===current.classification).map(d=>d.keyline);
+  const samePpt=drugs.filter(d=>d.ppt===current.ppt).map(d=>d.keyline);
+  return distractorOptions(current.keyline,sameClass,samePpt,drugs.map(d=>d.keyline));
+}
+function answerForStage(){
+  return stage===1?current.ppt:stage===2?current.classification:stage===3?current.mechanism:current.keyline;
+}
+function stageText(){
+  if(stage===1) return "이 약물이 나온 PPT를 선택해.";
+  if(stage===2) return "약물 분류를 선택해.";
+  if(stage===3) return "핵심 기전·표적을 선택해.";
+  return "마지막으로 꼭 외워야 할 한 줄을 선택해.";
+}
+function updateStar(){
+  if(!record||!current){ $("starBtn").textContent="☆"; $("starBtn").classList.remove("on"); return; }
+  const on=record.favorites.includes(current.id);
+  $("starBtn").textContent=on?"★":"☆";
+  $("starBtn").classList.toggle("on",on);
+  $("starBtn").title=on?"즐겨찾기 해제":"즐겨찾기 추가";
+}
+$("starBtn").onclick=()=>{
+  if(!current||!record) return;
+  const i=record.favorites.indexOf(current.id);
+  if(i>=0) record.favorites.splice(i,1);
+  else record.favorites.push(current.id);
+  saveRecord();
+};
+
+function renderStage(){
+  if(!current) return;
+  answered=false;
+  const ctx=getContext();
+  ctx.stage=stage;ctx.currentHadWrong=currentHadWrong;
+
+  $("drug").textContent=current.name;
+  $("priorityBadge").textContent=current.priority;
+  $("priorityBadge").className="priority "+(current.priority==="최우선"?"topP":"impP");
+  $("badge").textContent=`${stage}단계 / 4단계`;
+  $("stage").textContent=stageText();
+  $("feedback").textContent="";
+  $("bar").style.width=`${(stage-1)/4*100}%`;
+  $("path").style.display="none";
+  $("nextBtn").style.display="none";
+
+  const hint=$("contextHint");
+  if(stage===1 && nameCounts[current.name]>1){
+    hint.textContent=`이 약물은 여러 PPT에 반복 등장해. 문맥 힌트: ${PPT_TOPICS[current.ppt]}`;
+    hint.classList.remove("hidden");
+  }else if(stage>1){
+    hint.textContent=`현재 문맥: ${current.ppt} · ${PPT_TOPICS[current.ppt]}`;
+    hint.classList.remove("hidden");
+  }else{
+    hint.classList.add("hidden");
+    hint.textContent="";
+  }
+
+  const opts=optionsForStage();
+  $("opts").innerHTML="";
+  $("opts").classList.toggle("pptopts",stage===1);
+  opts.forEach((label,idx)=>{
+    const b=document.createElement("button");
+    b.className="opt";b.dataset.key=String(idx+1);b._label=label;
+    b.innerHTML=`<span class="keynum">${idx+1}.</span> ${escapeHtml(label)}`;
+    b.onclick=()=>choose(b,label);
+    $("opts").appendChild(b);
+  });
+  saveRecord();
+}
+
+function choose(btn,label){
+  if(answered||!current) return;
+  answered=true;
+  record.attempts++;
+  const ans=answerForStage();
+  const buttons=[...document.querySelectorAll(".opt")];
+  buttons.forEach(b=>b.disabled=true);
+
+  if(label===ans){
+    record.correct++;
+    btn.classList.add("correct");
+    $("feedback").textContent="정답.";
+    saveRecord();
+
+    setTimeout(()=>{
+      if(stage<4){
+        stage++;
+        getContext().stage=stage;
+        renderStage();
+      }else{
+        completeCurrent();
+      }
+    },430);
+  }else{
+    currentHadWrong=true;
+    getContext().currentHadWrong=true;
+    if(!record.wrongIds.includes(current.id)) record.wrongIds.push(current.id);
+    btn.classList.add("wrong");
+    buttons.find(b=>b._label===ans)?.classList.add("correct");
+    $("feedback").textContent=`정답은 “${ans}”. 같은 단계에서 다시 풀어봐.`;
+    saveRecord();
+    setTimeout(renderStage,950);
+  }
+}
+
+function completeCurrent(){
+  const ctx=getContext();
+  record.completed++;
+
+  if(record.settings.mode==="wrong" && !currentHadWrong){
+    record.wrongIds=record.wrongIds.filter(id=>id!==current.id);
+  }
+
+  ctx.completedThisRound++;
+  ctx.currentUid=null;ctx.stage=1;ctx.currentHadWrong=false;
+
+  const pool=getPool();
+  cleanContextAgainstPool(ctx,pool);
+
+  record.completedHistory.unshift({
+    id:current.id,drug:current.name,ppt:current.ppt,priority:current.priority,
+    classification:current.classification,time:new Date().toISOString()
+  });
+  record.completedHistory=record.completedHistory.slice(0,100);
+
+  $("bar").style.width="100%";
+  $("feedback").textContent="완료. 이 약물의 4단계를 전부 맞혔어.";
+  $("path").innerHTML=
+    `<b>정답 경로</b><br>`+
+    `${escapeHtml(current.ppt)} → ${escapeHtml(current.classification)} → ${escapeHtml(current.mechanism)} → ${escapeHtml(current.keyline)}`+
+    `<br><span style="color:#667085"><b>대표 용도·상황:</b> ${escapeHtml(current.use||"-")}</span>`;
+  $("path").style.display="block";
+  $("opts").innerHTML="";
+  $("contextHint").classList.add("hidden");
+  current=null;
+
+  if(!ctx.deck.length){
+    ctx.awaitingNextRound=true;
+    saveRecord();
+    setTimeout(showRoundOverlay,280);
+  }else{
+    $("nextBtn").textContent=record.settings.mode==="wrong"?"다음 오답":"다음 약물";
+    $("nextBtn").style.display="block";
+    saveRecord();
+  }
+}
+function nextDrug(){
+  const ctx=getContext();
+  if(ctx.awaitingNextRound){ showRoundOverlay(); return; }
+  const pool=getPool();
+  cleanContextAgainstPool(ctx,pool);
+  if(!ctx.deck.length){
+    ctx.awaitingNextRound=true;saveRecord();showRoundOverlay();return;
+  }
+  ctx.currentUid=ctx.deck.shift();
+  ctx.stage=1;ctx.currentHadWrong=false;
+  current=drugs.find(d=>d.id===ctx.currentUid)||null;
+  stage=1;currentHadWrong=false;
+  saveRecord();renderStage();
+}
+$("nextBtn").onclick=nextDrug;
+
+function showRoundOverlay(){
+  const ctx=getContext();
+  const pool=getPool();
+  const emptyReview = record.settings.mode!=="all" && pool.length===0;
+
+  if(emptyReview && record.settings.mode==="wrong"){
+    $("roundDoneTitle").textContent="오답 전부 정리 완료!";
+    $("roundDoneSub").textContent=`${importanceLabel()} 범위에서 현재 남은 오답이 없어.`;
+    $("nextRoundBtn").textContent="전체 문제로 돌아가기";
+  }else if(emptyReview && record.settings.mode==="favorite"){
+    $("roundDoneTitle").textContent="즐겨찾기 복습 완료!";
+    $("roundDoneSub").textContent=`${importanceLabel()} 범위에서 현재 즐겨찾기 문제가 없어.`;
+    $("nextRoundBtn").textContent="전체 문제로 돌아가기";
+  }else{
+    $("roundDoneTitle").textContent=`${ctx.round}회독 끝!`;
+    $("roundDoneSub").textContent=`${importanceLabel()} · ${modeLabel()}. 다음 회독도 새 순서로 계속 풀 수 있어.`;
+    $("nextRoundBtn").textContent=`${ctx.round+1}회독 시작`;
+  }
+  $("roundOverlay").classList.remove("hidden");
+}
+function startNextRound(){
+  const ctx=getContext();
+  const pool=getPool();
+  $("roundOverlay").classList.add("hidden");
+
+  if(!pool.length){
+    if(record.settings.mode!=="all"){
+      record.settings.mode="all";
+      saveRecord();
+      return activateContext();
+    }
+    return;
+  }
+
+  ctx.round++;
+  ctx.awaitingNextRound=false;
+  ctx.roundTotal=0;ctx.completedThisRound=0;
+  ctx.deck=[];ctx.currentUid=null;ctx.stage=1;ctx.currentHadWrong=false;
+  saveRecord();
+  activateContext();
+}
+$("nextRoundBtn").onclick=startNextRound;
+
+$("resetBtn").onclick=()=>{
+  if(!activeId) return;
+  safeRemove(storageKey(activeId));
+  record=emptyRecord();current=null;stage=1;answered=false;currentHadWrong=false;
+  safeSet(storageKey(activeId),JSON.stringify(record));
+  $("feedback").textContent="이 ID의 기록을 초기화했어.";
+  $("path").style.display="none";$("nextBtn").style.display="none";
+  $("roundOverlay").classList.add("hidden");
+  updateUi();
+  setTimeout(activateContext,320);
+};
+
+document.addEventListener("keydown",e=>{
+  if(!$("loginScreen").classList.contains("hidden")) return;
+
+  if(!$("roundOverlay").classList.contains("hidden")){
+    if(e.key==="Enter"){ e.preventDefault();$("nextRoundBtn").click(); }
+    return;
+  }
+
+  const numberKeys=stage===1?["1","2","3","4","5","6","7","8"]:["1","2","3","4"];
+  if(numberKeys.includes(e.key) && !answered){
+    const btn=document.querySelector(`.opt[data-key="${e.key}"]`);
+    if(btn && !btn.disabled){ e.preventDefault();btn.click(); }
+    return;
+  }
+  if(e.key==="Enter" && $("nextBtn").style.display!=="none"){
+    e.preventDefault();$("nextBtn").click();
+  }
+});
+
+window.addEventListener("beforeunload",saveRecord);
+$("idInput").focus();
+</script>
+<div class="creator-watermark">made by 833_서연</div>
+</body>
+</html>
